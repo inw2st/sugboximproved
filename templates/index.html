@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건의사항 제출</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>학생 건의사항</h1>
+        <form id="suggestionForm" method="post" novalidate>
+            <label>학년 선택:</label>
+            <input type="radio" name="grade" value="1학년"> 1학년
+            <input type="radio" name="grade" value="2학년"> 2학년
+            <input type="radio" name="grade" value="3학년"> 3학년
+
+            <label for="content">건의사항:</label>
+            <textarea id="content" name="content" placeholder="건의사항을 입력해주세요."></textarea>
+
+            <button type="submit">제출하기</button>
+        </form>
+
+        <div id="message" class="message"></div>
+
+        <hr>
+
+        {% if 'admin' in session %}
+            <div class="admin-buttons">
+                <a href="{{ url_for('admin_panel') }}"><button>건의 목록 보기</button></a>
+                <a href="{{ url_for('logout') }}"><button>로그아웃</button></a>
+            </div>
+        {% else %}
+            <a href="{{ url_for('admin_login') }}">관리자 로그인</a>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='submit.js') }}"></script>
+</body>
+</html>

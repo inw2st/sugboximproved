@@ -147,6 +147,31 @@ th.checkbox-cell input[type="checkbox"] {
     height: 20px;
 }
 
+/* 관리자 버튼 스타일 추가 */
+.admin-login-btn {
+    background-color: #3498db;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 15px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+.admin-login-btn:hover {
+    background-color: #2980b9;
+}
+
+.logout-btn {
+    background-color: #e74c3c !important; /* 빨간색 */
+}
+.logout-btn:hover {
+    background-color: #c0392b !important;
+}
+
 @media (max-width: 600px) {
     .container {
         width: 90%;

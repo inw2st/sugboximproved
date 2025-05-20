@@ -28,10 +28,10 @@
         {% if 'admin' in session %}
             <div class="admin-buttons">
                 <a href="{{ url_for('admin_panel') }}"><button>건의 목록 보기</button></a>
-                <a href="{{ url_for('logout') }}"><button>로그아웃</button></a>
+                <a href="{{ url_for('logout') }}"><button class="logout-btn">로그아웃</button></a>
             </div>
         {% else %}
-            <a href="{{ url_for('admin_login') }}">관리자 로그인</a>
+            <a href="{{ url_for('admin_login') }}" class="admin-login-btn">관리자 로그인</a>
         {% endif %}
     </div>
 

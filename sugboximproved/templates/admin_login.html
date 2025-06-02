@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 로그인</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>관리자 로그인</h1>
+            <form method="POST" id="loginForm">
+                <label for="username">아이디</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" required>
+
+                <!-- 체크박스 제거 -->
+                <!-- 숨겨진 input으로 항상 "on" 값 전송 -->
+                <input type="hidden" name="remember" value="on">
+
+                {% if site_key %}
+                <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
+                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                {% endif %}
+                
+                <button type="submit">로그인</button>
+            </form>
+        <a href="{{ url_for('index') }}">홈으로 돌아가기</a>
+        
+        <!-- 에러 메시지 표시 영역 -->
+        {% if error %}
+        <div id="login-message" class="message error" style="display: block;">{{ error }}</div>
+        {% else %}
+        <div id="login-message" class="message"></div>
+        {% endif %}
+    </div>
+    
+    <script>
+        // 로그인 실패 메시지 처리
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL 파라미터 확인 - 이 부분은 URL에서 에러 메시지를 받아오는 코드이나
+            // 이제 백엔드에서 템플릿으로 직접 에러를 전달하므로 불필요할 수 있습니다.
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            
+            if (error) {
+                const messageDiv = document.getElementById('login-message');
+                messageDiv.textContent = decodeURIComponent(error);
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+            }
+            
+            // 폼 제출 이벤트 처리 - 클라이언트 측 유효성 검사
+            document.querySelector('form').addEventListener('submit', function(e) {
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+                
+                if (!username || !password) {
+                    e.preventDefault();
+                    const messageDiv = document.getElementById('login-message');
+                    messageDiv.textContent = '아이디와 비밀번호를 모두 입력해주세요.';
+                    messageDiv.className = 'message error';
+                    messageDiv.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

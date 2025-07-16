@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>건의사항 확인</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .suggestion-box {
+            background-color: var(--bg-color);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .suggestion-box h2 {
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            color: var(--text-color);
+            font-size: 1.2em;
+        }
+        .meta-info {
+            font-size: 0.9em;
+            color: var(--secondary-text-color);
+            margin-bottom: 15px;
+        }
+        .content {
+            white-space: pre-wrap;
+            line-height: 1.7;
+            color: var(--text-color);
+        }
+        .status {
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: var(--secondary-bg-color);
+        }
+        .status.pending { background-color: #ff9500; }
+        .status.answered { background-color: #34c759; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1>건의사항 확인</h1>
+            <div class="theme-switch-wrapper">
+                <span>다크 모드</span>
+                <label class="theme-switch" for="theme-toggle">
+                    <input type="checkbox" id="theme-toggle" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+        </div>
+
+        <div class="suggestion-box">
+            <h2>제출한 건의사항</h2>
+            <p class="meta-info">
+                <strong>확인 ID:</strong> {{ request.view_args['suggestion_id'] }} | 
+                <strong>학년:</strong> {{ suggestion[1] }} | 
+                <strong>제출일:</strong> {{ suggestion[3] }}
+            </p>
+            <p class="content">{{ suggestion[2] }}</p>
+        </div>
+
+        <div class="suggestion-box">
+            <h2>
+                답변 상태: 
+                {% if suggestion[4] == '답변 완료' %}
+                    <span class="status answered">답변 완료</span>
+                {% else %}
+                    <span class="status pending">대기중</span>
+                {% endif %}
+            </h2>
+            {% if suggestion[5] %}
+                <p class="meta-info"><strong>답변일:</strong> {{ suggestion[6] }}</p>
+                <p class="content">{{ suggestion[5] }}</p>
+            {% else %}
+                <p>아직 답변이 등록되지 않았습니다.</p>
+            {% endif %}
+        </div>
+
+        <a href="{{ back_url }}" class="btn">뒤로가기</a>
+    </div>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+</body>
+</html>

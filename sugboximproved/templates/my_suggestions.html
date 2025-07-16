@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내 건의 목록</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .status {
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: var(--secondary-bg-color);
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .status.pending { background-color: #ff9500; }
+        .status.answered { background-color: #34c759; }
+        .suggestion-row {
+            cursor: pointer;
+        }
+        .content-preview {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 900px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1>내 건의 목록</h1>
+            <div class="theme-switch-wrapper">
+                <span>다크 모드</span>
+                <label class="theme-switch" for="theme-toggle">
+                    <input type="checkbox" id="theme-toggle" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+        </div>
+
+        {% if suggestions %}
+            <p>이 브라우저에서 제출한 건의 목록입니다. 각 항목을 클릭하여 자세한 내용과 답변을 확인하세요.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>확인 ID</th>
+                        <th>내용 미리보기</th>
+                        <th>상태</th>
+                        <th>제출 시간</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for suggestion in suggestions %}
+                    <tr class="suggestion-row" onclick="window.location='{{ url_for('view_suggestion', suggestion_id=suggestion[0]) }}';">
+                        <td data-label="확인 ID">{{ suggestion[0] }}</td>
+                        <td data-label="내용" class="content-preview">{{ suggestion[1] }}</td>
+                        <td data-label="상태">
+                            {% if suggestion[2] == '답변 완료' %}
+                                <span class="status answered">답변 완료</span>
+                            {% else %}
+                                <span class="status pending">대기중</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="제출 시간">{{ suggestion[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>이 브라우저에서 ��출된 건의사항이 없습니다.</p>
+        {% endif %}
+        
+        <hr>
+        <div class="admin-buttons">
+            <a href="{{ url_for('index') }}" class="btn">홈으로 돌아가기</a>
+            <a href="{{ url_for('check_suggestion') }}" class="btn" style="background-color: var(--secondary-text-color);">ID로 직접 조회</a>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+</body>
+</html>

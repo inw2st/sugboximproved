@@ -1,4 +1,3 @@
-// 수정된 submit.js
 document.querySelector('form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -6,8 +5,7 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     const content = document.querySelector('textarea[name="content"]').value.trim();
     const messageDiv = document.getElementById('message');
 
-    // 메시지 영역 초기화
-    messageDiv.textContent = '';
+    messageDiv.innerHTML = ''; // Use innerHTML to clear
     messageDiv.className = 'message';
     messageDiv.style.display = 'none';
 
@@ -36,25 +34,29 @@ document.querySelector('form').addEventListener('submit', async (e) => {
 
         if (!response.ok) {
             const text = await response.text();
-            showMessage('오류가 발생했습니다: ' + text, 'error');
+            showMessage(`오류가 발생했습니다: ${text}`, 'error');
             return;
         }
 
         const data = await response.json();
-        showMessage('건의사항이 성공적으로 제출되었습니다. ID: ' + data.id, 'success');
+        const suggestionId = data.id;
+        const checkUrl = `/suggestion/${suggestionId}`;
+        
+        showMessage(
+            `건의사항이 성공적으로 제출되었습니다. (ID: ${suggestionId}) <br><a href="${checkUrl}">여기</a>를 클릭하여 답변을 확인하세요.`, 
+            'success'
+        );
         document.querySelector('form').reset();
+
     } catch (error) {
         showMessage('제출 중 오류가 발생했습니다.', 'error');
         console.error(error);
     }
 });
 
-// 메시지 표시 함수 - alert() 호출 제거
-function showMessage(text, type) {
+function showMessage(html, type) {
     const messageDiv = document.getElementById('message');
-    messageDiv.textContent = text;
+    messageDiv.innerHTML = html;
     messageDiv.className = 'message ' + type;
     messageDiv.style.display = 'block';
-    
-    // alert() 호출 제거됨
 }

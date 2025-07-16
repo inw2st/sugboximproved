@@ -5,233 +5,53 @@
     <title>건의 목록</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* 기본 스타일링 */
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        h1 {
+        .status {
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: var(--secondary-bg-color);
             text-align: center;
-            margin-bottom: 30px;
+            font-size: 0.9em;
         }
-        
-        /* 테이블 스타일링 개선 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            table-layout: fixed; /* 테이블 레이아웃 고정 */
-        }
-        
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-            vertical-align: top; /* 상단 정렬 */
-            word-wrap: break-word; /* 단어 줄바꿈 */
-            overflow-wrap: break-word; /* 오버플로우 방지 */
-        }
-        
-        th {
-            background-color: #f2f2f2;
-            position: sticky; /* 헤더 고정 */
-            top: 0;
-        }
-        
-        /* 컬럼 너비 조정 */
-        .checkbox-cell {
-            width: 40px;
-            text-align: center;
-        }
-        
-        .id-cell {
-            width: 60px;
-        }
-        
-        .grade-cell {
-            width: 80px;
-        }
-        
-        .content-cell {
-            /* 내용 컬럼은 최대한 넓게 설정 */
-            min-width: 300px;
-        }
-        
-        .ip-cell {
-            width: 120px;
-        }
-        
-        .user-agent-cell {
-            width: 180px;
-        }
-        
-        .timestamp-cell {
-            width: 140px;
-        }
-        
-        /* 내용 셀 스타일링 */
-        .content-text {
-            white-space: pre-wrap; /* 줄바꿈 유지 */
-            max-height: 150px; /* 최대 높이 제한 */
-            overflow-y: auto; /* 세로 스크롤 추가 */
-            padding: 5px;
-        }
-        
-        /* 사용자 정보 스타일 */
-        .user-info {
-            font-size: 0.85em;
-            color: #666;
-        }
-        
-        .user-agent {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 100%;
-        }
-        
-        .timestamp {
-            font-size: 0.85em;
-            color: #666;
-        }
-        
-        /* 버튼 스타일링 */
-        button {
-            background-color: #3576f0;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-        }
-        
-        button:hover {
-            background-color: #fd4646;
-        }
-        
-        .logout-btn {
-            background-color: #f44336;
-        }
-        
-        .logout-btn:hover {
-            background-color: #d32f2f;
-        }
-        
-        .admin-buttons {
-            margin-top: 20px;
-            text-align: right;
-        }
-        
-        /* 메시지 스타일 */
-        .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            display: none;
-        }
-        
-        .success {
-            background-color: #dff0d8;
-            color: #3c763d;
-        }
-        
-        .error {
-            background-color: #f2dede;
-            color: #a94442;
-        }
-        
-        /* 반응형 테이블 개선 */
-        @media screen and (max-width: 768px) {
-            table, thead, tbody, th, td, tr {
-                display: block;
-            }
-            
-            thead tr {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
-            }
-            
-            tr {
-                margin-bottom: 15px;
-                border: 1px solid #ccc;
-                position: relative;
-            }
-            
-            td {
-                border: none;
-                border-bottom: 1px solid #eee;
-                position: relative;
-                padding-left: 40%;
-                min-height: 30px;
-            }
-            
-            td:before {
-                position: absolute;
-                top: 12px;
-                left: 12px;
-                width: 35%;
-                padding-right: 10px;
-                white-space: nowrap;
-                content: attr(data-label);
-                font-weight: bold;
-                color: #555;
-            }
-            
-            .content-cell {
-                padding-left: 12px;
-                margin-top: 30px;
-            }
-            
-            .content-cell:before {
-                content: attr(data-label);
-                display: block;
-                font-weight: bold;
-                margin-bottom: 5px;
-                position: static;
-            }
-            
-            .checkbox-cell {
-                padding-left: 12px;
-                text-align: left;
-            }
-            
-            .content-text {
-                max-height: none;
-            }
+        .status.pending { background-color: #ff9500; }
+        .status.answered { background-color: #34c759; }
+        .action-btn {
+            padding: 8px 12px;
+            font-size: 14px;
+            width: auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>건의 목록</h1>
+    <div class="container" style="max-width: 1200px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1>건의 목록</h1>
+            <div class="theme-switch-wrapper">
+                <span>다크 모드</span>
+                <label class="theme-switch" for="theme-toggle">
+                    <input type="checkbox" id="theme-toggle" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+        </div>
 
         <form method="POST" action="{{ url_for('delete_suggestions') }}">
-            <button type="submit" onclick="return confirm('선택한 건의를 삭제하시겠습니까?')">선택 삭제</button>
-
+            
             <table>
                 <thead>
                     <tr>
-                        <th class="checkbox-cell">
-                            <input type="checkbox" onclick="toggleAll(this)">
-                        </th>
-                        <th class="id-cell">ID</th>
-                        <th class="grade-cell">학년</th>
-                        <th class="content-cell">내용</th>
-                        <th class="ip-cell">IP 주소</th>
-                        <th class="user-agent-cell">브라우저 정보</th>
-                        <th class="timestamp-cell">시간</th>
+                        <th class="checkbox-cell"><input type="checkbox" onclick="toggleAll(this)"></th>
+                        <th>내부 ID</th>
+                        <th>확인 ID</th>
+                        <th>학년</th>
+                        <th style="width: 40%;">내용</th>
+                        <th>시간</th>
+                        <th>상태</th>
+                        <th>답변</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -240,62 +60,44 @@
                         <td class="checkbox-cell" data-label="선택">
                             <input type="checkbox" name="delete_ids" value="{{ suggestion[0] }}">
                         </td>
-                        <td class="id-cell" data-label="ID">{{ suggestion[0] }}</td>
-                        <td class="grade-cell" data-label="학년">{{ suggestion[1] }}</td>
+                        <td data-label="내부 ID">{{ suggestion[0] }}</td>
+                        <td data-label="확인 ID">{{ suggestion[6] or 'N/A' }}</td>
+                        <td data-label="학년">{{ suggestion[1] }}</td>
                         <td class="content-cell" data-label="내용">
                             <div class="content-text">{{ suggestion[2] }}</div>
                         </td>
-                        <td class="ip-cell" data-label="IP 주소">{{ suggestion[3] or '알 수 없음' }}</td>
-                        <td class="user-agent-cell" data-label="브라우저 정보">
-                            <div class="user-agent" title="{{ suggestion[4] or '알 수 없음' }}">{{ suggestion[4] or '알 수 없음' }}</div>
+                        <td data-label="시간">{{ suggestion[3] }}</td>
+                        <td data-label="상태">
+                            {% if suggestion[4] == '답변 완료' %}
+                                <span class="status answered">답변 완료</span>
+                            {% else %}
+                                <span class="status pending">대기중</span>
+                            {% endif %}
                         </td>
-                        <td class="timestamp-cell" data-label="시간" class="timestamp">{{ suggestion[5] or '' }}</td>
+                        <td data-label="답변">
+                            <a href="{{ url_for('admin_reply', suggestion_id=suggestion[0]) }}" class="btn action-btn">
+                                {% if suggestion[5] %}답변 수정{% else %}답변하기{% endif %}
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             
-            <div id="admin-message" class="message"></div>
-
             <div class="admin-buttons">
-                <a href="{{ url_for('index') }}"><button type="button">홈으로</button></a>
-                <a href="{{ url_for('logout') }}"><button type="button" class="logout-btn">로그아웃</button></a>
+                <button type="submit" class="btn btn-danger" onclick="return confirm('선택한 건의를 정말 삭제하시겠습니까?')">선택 삭제</button>
+                <a href="{{ url_for('index') }}" class="btn">홈으로</a>
+                <a href="{{ url_for('logout') }}" class="btn" style="background-color: var(--secondary-text-color) !important;">로그아웃</a>
             </div>
         </form>
     </div>
 
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
     <script>
         function toggleAll(source) {
             const checkboxes = document.querySelectorAll('input[name="delete_ids"]');
             checkboxes.forEach(cb => cb.checked = source.checked);
         }
-        
-        // 메시지 처리
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const message = urlParams.get('message');
-            const type = urlParams.get('type') || 'success';
-            
-            if (message) {
-                const messageDiv = document.getElementById('admin-message');
-                messageDiv.textContent = decodeURIComponent(message);
-                messageDiv.className = 'message ' + type;
-                messageDiv.style.display = 'block';
-            }
-            
-            // 브라우저 정보 마우스 오버 시 전체 보기 기능
-            const userAgentCells = document.querySelectorAll('.user-agent');
-            userAgentCells.forEach(cell => {
-                cell.addEventListener('mouseenter', function() {
-                    this.style.whiteSpace = 'normal';
-                    this.style.overflow = 'visible';
-                });
-                cell.addEventListener('mouseleave', function() {
-                    this.style.whiteSpace = 'nowrap';
-                    this.style.overflow = 'hidden';
-                });
-            });
-        });
     </script>
 </body>
 </html>

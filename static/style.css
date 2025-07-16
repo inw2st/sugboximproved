@@ -148,6 +148,7 @@ button, .btn {
     text-align: center;
     display: inline-block;
     width: 100%;
+    white-space: nowrap;
 }
 
 button:hover, .btn:hover {

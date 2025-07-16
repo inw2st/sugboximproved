@@ -8,6 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
     <style>
         .status {
             font-weight: 700;
@@ -16,6 +24,7 @@
             color: var(--secondary-bg-color);
             text-align: center;
             font-size: 0.9em;
+            white-space: nowrap;
         }
         .status.pending { background-color: #ff9500; }
         .status.answered { background-color: #34c759; }
@@ -23,6 +32,7 @@
             padding: 8px 12px;
             font-size: 14px;
             width: auto;
+            white-space: nowrap;
         }
     </style>
 </head>
